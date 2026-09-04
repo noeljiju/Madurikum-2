@@ -1,53 +1,37 @@
-# Aadyam Kaikkum Pinne Madhurikkum (ആദ്യം കൈക്കും പിന്നെ മധുരിക്കും)
-### *The Reverse Emotion "Simon Says" Game for TinkerHub Useless Projects*
+<img width="1280" height="640" alt="git (1)" src="https://github.com/user-attachments/assets/8920b256-2ba8-4988-b824-5351134eb4bd" />
 
----
+# Aadyam Kaikkum Pinne Madhurikkum (ആദ്യം കൈക്കും പിന്നെ മധുരിക്കും) 🎯
 
-## 🎮 What Is This?
-An aggressively useless, real-time AI computer-vision game where the AI demands extreme, bizarre facial expressions from you through your webcam. 
+## Basic Details
+### Team Name: [Insert Team Name]
 
-- **The Reverse Twist:** When you succeed, it insults your face. When you fail, it ruthlessly eliminates you.
-- **The Simon Trap:** If Simon demands it (`SIMON SAYS:`), you must perform within the countdown. If Simon **DID NOT** say it (`SUDDEN ORDER:`), any facial movement will instantly disqualify you!
-- **Sarcastic Commentator:** Recorded Malayalam roast clips from the local `audio/` folder, synchronized with the displayed dialogue.
+### Team Members
+- Team Lead: [Name] - [College]
+- Member 2: [Name] - [College]
+- Member 3: [Name] - [College]
 
----
+### Project Description
+An aggressively useless, real-time AI computer-vision game where the AI demands extreme, bizarre facial expressions from you through your webcam. If Simon says do it, you must perform; if Simon didn't say it, any twitch disqualifies you—and succeeding only earns you ruthless Malayalam roasts!
 
-## 🚀 How to Run the Game
+### The Problem (that doesn't exist)
+Humans walk around having far too much unearned dignity and emotional stability, completely unmonitored by artificial intelligence that judges whether their facial muscles work properly.
 
-1. Open your terminal in this project folder and run:
-   ```bash
-   py run_game.py
-   ```
-   If your terminal is one directory above the project, use `py MADURAM\run_game.py` instead.
-2. Your default web browser will automatically launch:
-   ```
-   http://localhost:8000/index.html
-   ```
-3. Click **"ENGAGE CAMERA"**, grant webcam permissions, and prepare to embarrass yourself!
+### The Solution (that nobody asked for)
+A reverse "Simon Says" game powered by Google MediaPipe that forces players into ridiculous contortions (KTU Scowls, Wide Smiles, Winks, and Statues) while synchronizing recorded Malayalam roast commentary to emotionally break you when you win, and eliminate you when you fail.
 
-*(Note: Running via `py run_game.py` is recommended because browsers require a local HTTP server like `localhost` to allow camera and local audio access.)*
+## Technical Details
+### Technologies/Components Used
+For Software:
+- **Languages used:** JavaScript (ES6+), Python, HTML5, CSS3
+- **Frameworks used:** None (Vanilla Web Stack)
+- **Libraries used:** Google MediaPipe Face Mesh (468 3D facial landmarks)
+- **Tools used:** Web Audio API, Python `http.server`, Modern Web Browser
 
----
+### Implementation
+For Software:
 
-## 🧠 How Emotion Detection & "Training" Works
-
-Instead of training a heavy, brittle CNN from scratch, this game uses **Normalized Geometric Mesh Kinematics** via Google MediaPipe Face Mesh (468 3D facial landmarks):
-
-| Emotion | Landmarks Used | Geometric Condition |
-| :--- | :--- | :--- |
-| **Wide Smile** | 61 (Left mouth corner), 291 (Right mouth corner), 10 & 152 (Face height) | Mouth width normalized by face height > 0.38 and corners pulled upward |
-| **Absolute Shock** | 13 & 14 (Inner lips), 105 & 334 (Eyebrows), 159 & 386 (Eyes) | Jaw opening gap > 0.15 + eyebrow lift ratio > 0.45 |
-| **Wink (Left/Right)** | Left eye (159, 145, 33, 133), Right eye (386, 374, 362, 263) | Eye Aspect Ratio (EAR) < 0.15 for one eye while other eye EAR > 0.22 |
-| **Anger / KTU Scowl** | 55 & 285 (Inner brows) | Distance between inner eyebrow heads compresses below threshold |
-| **Statue / Freeze** | Landmark 1 (Nose Tip) | Coordinate delta $\Delta (x, y) < 0.0035$ maintained for 1.8 seconds |
-
-### Want to add your own custom face?
-In [index.html](file:///c:/Users/user/Desktop/useless%20project/index.html), inspect the `evaluateFace(landmarks)` function. You can calculate distances between any of MediaPipe's 468 landmarks and set thresholds!
-
----
-
-## 🏆 Pitching to TinkerHub Judges
-
-- **The Hook:** *"Everyone builds AI to solve problems. We built AI to evaluate whether your face is capable of basic human dignity."*
-- **The Tech Flex:** Real-time face mesh triangulation, aspect ratio calculation, Web Audio API game effects, and local recorded Malayalam roast clips—zero cloud latency, runs 100% locally.
-- **The Comedy:** Let judges come up to the webcam and watch them get caught by the fake Simon Says prompt!
+# Installation
+Clone the repository:
+```bash
+git clone [https://github.com/](https://github.com/)[your-username]/[your-repo-name].git
+cd [your-repo-name]
