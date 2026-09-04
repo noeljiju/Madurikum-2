@@ -2,13 +2,13 @@
 
 ## Basic Details
 
-### Team Name: [Add Team Name]
+### Team Name: [Nexus]
 
 ### Team Members
 
-- Team Lead: [Add Name] - [Add College]
-- Member 2: [Add Name] - [Add College]
-- Member 3: [Add Name] - [Add College]
+- Team Lead: [Noel & Naveen] - [MITS kochi]
+- Member 2: [Naveen] - [MITS kochi]
+- Member 3: [Noel] - [Mits Kochi]
 
 ### Project Description
 
@@ -149,8 +149,8 @@ The video should demonstrate webcam permission, expression matching, recorded Ma
 
 ## Team Contributions
 
-- [Name 1]: Face detection and expression scoring
-- [Name 2]: Game interface, scoring, and round flow
-- [Name 3]: Malayalam roast audio, subtitles, and deployment
+- [Naveen]: Face detection and expression scoring
+- [Noel]: Game interface, scoring, and round flow
+- [Naveen & Noel]: Malayalam roast audio, subtitles, and deployment
 
 Made with ❤️ at TinkerHub Useless Projects
