@@ -5,5 +5,5 @@ echo ==================================================
 echo   Starting AI Expression Arena...
 echo ==================================================
 start http://localhost:8000/index.html
-python run_game.py
+py run_game.py
 pause

@@ -28,6 +28,7 @@ class EmotionDetector {
         this.faceMesh = null;
         this.lastNosePos = null;
         this.freezeAccumulator = 0;
+        this.activeDialogueAudio = null;
 
         // Authentic Raw Malayalam Slang Roasts
         this.malayalamRoasts = {
@@ -86,79 +87,6 @@ class EmotionDetector {
     }
 
     /**
-     * Speaks arbitrary text using Web Speech API with Chrome-bug workarounds
-     */
-    speakText(text, options = {}) {
-        if (!this.options.voiceEnabled || typeof window === 'undefined' || !window.speechSynthesis) {
-            return;
-        }
-
-        try {
-            // Unstick Chrome speech synthesis paused bug
-            window.speechSynthesis.resume();
-            window.speechSynthesis.cancel();
-
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = options.rate || 1.0;
-            utterance.pitch = options.pitch || 0.95;
-            utterance.volume = 1.0;
-
-            const voices = window.speechSynthesis.getVoices();
-            if (voices && voices.length > 0) {
-                // Find Indian English, Malayalam, or default English voice for authentic comedic cadence
-                const preferredVoice = voices.find(v => 
-                    v.lang.includes('IN') || v.lang.includes('ml') || v.name.includes('India')
-                ) || voices.find(v => v.lang.startsWith('en')) || voices[0];
-                if (preferredVoice) {
-                    utterance.voice = preferredVoice;
-                }
-            }
-
-            // CRITICAL: Prevent Chromium V8 Garbage Collection Bug from stopping speech mid-sentence
-            window._activeSpeechUtterance = utterance;
-            utterance.onend = () => { window._activeSpeechUtterance = null; };
-            utterance.onerror = (e) => { 
-                console.warn("Speech synthesis error:", e);
-                window._activeSpeechUtterance = null; 
-            };
-
-            setTimeout(() => {
-                window.speechSynthesis.resume();
-                window.speechSynthesis.speak(utterance);
-            }, 40);
-        } catch (err) {
-            console.warn("Speech synthesis exception:", err);
-        }
-    }
-
-    /**
-     * Announces a newly active demand aloud at the start of each task!
-     */
-    speakDemand(emotion, roundNum = 1) {
-        const demandAnnouncements = {
-            SMILE: {
-                ml: "റൗണ്ട് " + roundNum + ": ഇളിച്ചു കാണിക്ക്!",
-                audio: "Round " + roundNum + "! Demand: Show a wide smile! Ilichu kaanikk mone!"
-            },
-            CRY: {
-                ml: "റൗണ്ട് " + roundNum + ": കരഞ്ഞു കാണിക്ക്!",
-                audio: "Round " + roundNum + "! Demand: Cry and weep! Karayan thudangikko!"
-            },
-            LAUGH: {
-                ml: "റൗണ്ട് " + roundNum + ": വാ പൊളിച്ചു ചിരിക്ക്!",
-                audio: "Round " + roundNum + "! Demand: Laugh out loud! Sadhanam kayyilundo!"
-            },
-            ANGRY: {
-                ml: "റൗണ്ട് " + roundNum + ": കട്ടക്കലിപ്പ് കാണിക്ക്!",
-                audio: "Round " + roundNum + "! Demand: Fierce anger! Shaji chetta ivale angu!"
-            }
-        };
-        const item = demandAnnouncements[emotion] || demandAnnouncements.SMILE;
-        this.speakText(item.audio, { rate: 1.05, pitch: 1.0 });
-        return item;
-    }
-
-    /**
      * Speaks opposite Malayalam slang commentary using Web Speech API
      * @param {string} emotion - 'SMILE' | 'CRY' | 'LAUGH' | 'ANGRY'
      * @param {boolean} isWin - true if user matched, false if user failed
@@ -169,8 +97,48 @@ class EmotionDetector {
         const choices = isWin ? pack.win : pack.fail;
         const item = choices[Math.floor(Math.random() * choices.length)];
 
-        this.speakText(item.audio, { rate: 1.0, pitch: 0.9 });
-        return item;
+        const cueId = `${emotion.toLowerCase()}_${isWin ? 1 : 2}`;
+        const cue = (window.dialogueCues || []).find(item => item.id === cueId);
+        if (cue) {
+            this.playDialogueCue(cue);
+            return { ml: cue.fullText, audio: cue.audioSrc, cue };
+        }
+
+        return { ml: item.ml, audio: null };
+    }
+
+    speakTimeoutCue() {
+        const cues = (window.dialogueCues || []).filter(item => item.emotion === 'TIMEOUT');
+        const cue = cues[Math.floor(Math.random() * cues.length)];
+        if (!cue) {
+            return this.speakOppositeRoast('SMILE', false);
+        }
+
+        this.playDialogueCue(cue);
+        return { ml: cue.fullText, audio: cue.audioSrc, cue };
+    }
+
+    playDialogueCue(cue) {
+        if (!this.options.voiceEnabled) return;
+
+        if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('dialoguecue', { detail: cue }));
+        }
+
+        if (this.activeDialogueAudio) {
+            this.activeDialogueAudio.pause();
+            this.activeDialogueAudio.currentTime = 0;
+        }
+
+        const audio = new Audio(cue.audioSrc);
+        this.activeDialogueAudio = audio;
+        audio.volume = 1;
+        audio.addEventListener('error', () => {
+            console.warn(`Dialogue audio unavailable: ${cue.audioSrc}`);
+        }, { once: true });
+        audio.play().catch(() => {
+            console.warn(`Dialogue audio could not play: ${cue.audioSrc}`);
+        });
     }
 
     /**
@@ -198,18 +166,26 @@ class EmotionDetector {
         const browLiftR = this.dist(landmarks[334], landmarks[386]) / faceHeight;
         const avgBrowLift = (browLiftL + browLiftR) / 2;
 
-        // Calculate emotion scores
-        // SMILE: wide mouth + corners pulled up
-        const smileScore = Math.min(1.0, Math.max(0, (mouthWidth - 0.32) / 0.14 + (cornerElevation > 0.015 ? 0.35 : 0)));
+        // Calculate emotion scores from normalized facial geometry.
+        // SMILE: width, elevated corners, and a small open-mouth component.
+        const smileWidthScore = Math.max(0, Math.min(1, (mouthWidth - 0.30) / 0.16));
+        const smileElevationScore = Math.max(0, Math.min(1, (cornerElevation - 0.008) / 0.035));
+        const smileOpenScore = Math.max(0, Math.min(1, (mouthOpenGap - 0.025) / 0.10));
+        const smileScore = Math.min(1.0, Math.max(0, smileWidthScore * 0.55 + smileElevationScore * 0.35 + smileOpenScore * 0.10));
 
         // CRY: corners pulled DOWN (negative elevation) + slightly open lip or inner brow raised
         const cryScore = Math.min(1.0, Math.max(0, (-cornerElevation - 0.005) / 0.03 + (avgBrowLift > 0.14 ? 0.25 : 0)));
 
-        // LAUGH: wide open mouth + wide mouth width
-        const laughScore = (mouthOpenGap > 0.14 && mouthWidth > 0.36) ? Math.min(1.0, (mouthOpenGap - 0.12) / 0.12 + 0.3) : 0;
+        // LAUGH / SHOCK: mouth aperture is the primary signal, with width as support.
+        const apertureScore = Math.max(0, Math.min(1, (mouthOpenGap - 0.105) / 0.12));
+        const apertureWidthSupport = Math.max(0, Math.min(1, (mouthWidth - 0.30) / 0.16));
+        const laughScore = apertureScore * 0.80 + apertureWidthSupport * 0.20;
 
-        // ANGRY: inner brows furrowed tight together (<0.12) and lower
-        const angryScore = Math.min(1.0, Math.max(0, (0.15 - innerBrowsDist) / 0.065));
+        // ANGRY: combine brow compression, brow lowering, and eye squint.
+        const browCompressionScore = Math.max(0, Math.min(1, (0.18 - innerBrowsDist) / 0.08));
+        const browLoweringScore = Math.max(0, Math.min(1, (0.16 - avgBrowLift) / 0.08));
+        const eyeSquintScore = Math.max(0, Math.min(1, (0.075 - ((this.dist(landmarks[159], landmarks[145]) + this.dist(landmarks[386], landmarks[374])) / 2 / (this.dist(landmarks[33], landmarks[263]) || 0.25))) / 0.035));
+        const angryScore = browCompressionScore * 0.55 + browLoweringScore * 0.25 + eyeSquintScore * 0.20;
 
         const scores = {
             SMILE: Math.round(smileScore * 100) / 100,
@@ -231,7 +207,8 @@ class EmotionDetector {
 
         const blendshapes = {
             smileIntensity: Math.round(smileScore * 100),
-            mouthOpen: Math.round(Math.min(1.0, mouthOpenGap / 0.16) * 100),
+            mouthAperture: Math.round(Math.min(1.0, mouthOpenGap / 0.225) * 100),
+            mouthOpen: Math.round(Math.min(1.0, mouthOpenGap / 0.225) * 100),
             browRaise: Math.round(Math.min(1.0, avgBrowLift / 0.18) * 100),
             fierceIntensity: Math.round(angryScore * 100)
         };

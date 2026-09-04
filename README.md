@@ -8,23 +8,24 @@ An aggressively useless, real-time AI computer-vision game where the AI demands 
 
 - **The Reverse Twist:** When you succeed, it insults your face. When you fail, it ruthlessly eliminates you.
 - **The Simon Trap:** If Simon demands it (`SIMON SAYS:`), you must perform within the countdown. If Simon **DID NOT** say it (`SUDDEN ORDER:`), any facial movement will instantly disqualify you!
-- **Sarcastic Commentator:** Real-time Web Speech voice synthesizer roasting you in English or Malayalam memes (KTU exams, serial drama face expressions, etc.).
+- **Sarcastic Commentator:** Recorded Malayalam roast clips from the local `audio/` folder, synchronized with the displayed dialogue.
 
 ---
 
 ## 🚀 How to Run the Game
 
-1. Open your terminal in this project folder:
+1. Open your terminal in this project folder and run:
    ```bash
-   python run_game.py
+   py run_game.py
    ```
+   If your terminal is one directory above the project, use `py MADURAM\run_game.py` instead.
 2. Your default web browser will automatically launch:
    ```
    http://localhost:8000/index.html
    ```
 3. Click **"ENGAGE CAMERA"**, grant webcam permissions, and prepare to embarrass yourself!
 
-*(Note: Running via `python run_game.py` is recommended because browsers require a local HTTP server like `localhost` to allow camera and speech synthesis access).*
+*(Note: Running via `py run_game.py` is recommended because browsers require a local HTTP server like `localhost` to allow camera and local audio access.)*
 
 ---
 
@@ -48,5 +49,5 @@ In [index.html](file:///c:/Users/user/Desktop/useless%20project/index.html), ins
 ## 🏆 Pitching to TinkerHub Judges
 
 - **The Hook:** *"Everyone builds AI to solve problems. We built AI to evaluate whether your face is capable of basic human dignity."*
-- **The Tech Flex:** Real-time 60 FPS face mesh triangulation, aspect ratio calculation, Web Audio API sound synthesizers, and Web Speech API roasts—zero cloud latency, runs 100% locally.
+- **The Tech Flex:** Real-time face mesh triangulation, aspect ratio calculation, Web Audio API game effects, and local recorded Malayalam roast clips—zero cloud latency, runs 100% locally.
 - **The Comedy:** Let judges come up to the webcam and watch them get caught by the fake Simon Says prompt!

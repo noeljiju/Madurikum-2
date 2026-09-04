@@ -1,0 +1,16 @@
+const dialogueCues = [
+  { id: 'smile_1', emotion: 'SMILE', fullText: 'ഊഹ് പിന്നെ... വലിയൊരു ചിരി! ലോട്ടറി അടിച്ചോ?', audioSrc: 'audio/smile_1.mp4', subtitles: [{ start: 0, end: 1, text: 'ഊഹ്' }, { start: 1, end: 2, text: 'പിന്നെ...' }, { start: 2, end: 3, text: 'വലിയൊരു ചിരി!' }, { start: 3, end: 4, text: 'ലോട്ടറി അടിച്ചോ?' }] },
+  { id: 'cry_1', emotion: 'CRY', fullText: 'ശ്ശോ കരഞ്ഞു മെഴുകല്ലേ... കണ്ടിട്ട് സഹിക്കാൻ പറ്റുന്നില്ല!', audioSrc: 'audio/cry_1.mp4', subtitles: [{ start: 0, end: 1, text: 'ശ്ശോ' }, { start: 1, end: 2, text: 'കരഞ്ഞു മെഴുകല്ലേ...' }, { start: 2, end: 3.5, text: 'കണ്ടിട്ട് സഹിക്കാൻ പറ്റുന്നില്ല!' }] },
+  { id: 'laugh_1', emotion: 'LAUGH', fullText: 'നിർത്തി ചിരിയെടാ... തൊണ്ട പൊട്ടി താഴെ വീഴും!', audioSrc: 'audio/laugh_1.mp4', subtitles: [{ start: 0, end: 1.5, text: 'നിർത്തി ചിരിയെടാ...' }, { start: 1.5, end: 3, text: 'തൊണ്ട പൊട്ടി താഴെ വീഴും!' }] },
+  { id: 'angry_1', emotion: 'ANGRY', fullText: 'കട്ടക്കലിപ്പ് തന്നെ! പേടിച്ചു പോയി എന്റെ പൊന്നോ!', audioSrc: 'audio/angry_1.mp4', subtitles: [{ start: 0, end: 1.5, text: 'കട്ടക്കലിപ്പ് തന്നെ!' }, { start: 1.5, end: 3.5, text: 'പേടിച്ചു പോയി എന്റെ പൊന്നോ!' }] },
+  { id: 'smile_2', emotion: 'SMILE', fullText: 'ചിരിക്കാൻ പറഞ്ഞപ്പോ ഈ കോലം കെട്ടിയതാണോ? കഷ്ടം തന്നെ!', audioSrc: 'audio/smile_2.mp4', subtitles: [{ start: 0, end: 2, text: 'ചിരിക്കാൻ പറഞ്ഞപ്പോ ഈ കോലം കെട്ടിയതാണോ?' }, { start: 2, end: 4, text: 'കഷ്ടം തന്നെ!' }] },
+  { id: 'cry_2', emotion: 'CRY', fullText: 'കരയാൻ പറഞ്ഞിട്ട് ചിരിക്കുകയാണോ? എന്തൊരു അഭിനയം!', audioSrc: 'audio/cry_2.mp4', subtitles: [{ start: 0, end: 2, text: 'കരയാൻ പറഞ്ഞിട്ട് ചിരിക്കുകയാണോ?' }, { start: 2, end: 3.5, text: 'എന്തൊരു അഭിനയം!' }] },
+  { id: 'laugh_2', emotion: 'LAUGH', fullText: 'ഇതാണോ അട്ടഹാസം? കണ്ടിട്ട് ചുമക്കുന്ന പോലെയുണ്ട്!', audioSrc: 'audio/laugh_2.mp4', subtitles: [{ start: 0, end: 1.5, text: 'ഇതാണോ അട്ടഹാസം?' }, { start: 1.5, end: 3, text: 'കണ്ടിട്ട് ചുമക്കുന്ന പോലെയുണ്ട്!' }] },
+  { id: 'angry_2', emotion: 'ANGRY', fullText: 'കലിപ്പ് കാണിക്ക് എന്ന് പറഞ്ഞപ്പോ ചിണുങ്ങുന്നു!', audioSrc: 'audio/angry_2.mp4', subtitles: [{ start: 0, end: 2, text: 'കലിപ്പ് കാണിക്ക് എന്ന് പറഞ്ഞപ്പോ' }, { start: 2, end: 3.5, text: 'ചിണുങ്ങുന്നു!' }] },
+  { id: 'timeout_1', emotion: 'TIMEOUT', fullText: 'സമയം കഴിഞ്ഞു! ഇത് ചിരിയോ അതോ കാറ്റടിച്ച പപ്പടമോ?', audioSrc: 'audio/timeout_1.mp4', subtitles: [{ start: 0, end: 1.5, text: 'സമയം കഴിഞ്ഞു!' }, { start: 1.5, end: 3.5, text: 'ഇത് ചിരിയോ അതോ കാറ്റടിച്ച പപ്പടമോ?' }] },
+  { id: 'timeout_2', emotion: 'TIMEOUT', fullText: 'ഇത്രേം സമയം തന്നിട്ടും ഒരു ഭാവവും വന്നില്ലല്ലോ!', audioSrc: 'audio/timeout_2.mp4', subtitles: [{ start: 0, end: 2, text: 'ഇത്രേം സമയം തന്നിട്ടും' }, { start: 2, end: 3.5, text: 'ഒരു ഭാവവും വന്നില്ലല്ലോ!' }] },
+  { id: 'timeout_3', emotion: 'TIMEOUT', fullText: 'ക്യാമറ നോക്കി പേടിച്ചു പോയോ? അടുത്ത റൗണ്ടിലെങ്കിലും കാണിക്ക്!', audioSrc: 'audio/timeout_3.mp4', subtitles: [{ start: 0, end: 2, text: 'ക്യാമറ നോക്കി പേടിച്ചു പോയോ?' }, { start: 2, end: 4, text: 'അടുത്ത റൗണ്ടിലെങ്കിലും കാണിക്ക്!' }] },
+  { id: 'timeout_4', emotion: 'TIMEOUT', fullText: 'തുരുമ്പിച്ച മുഖം തന്നെ! ഒരൊറ്റ എക്സ്പ്രഷനും ശരിയായില്ല!', audioSrc: 'audio/timeout_4.mp4', subtitles: [{ start: 0, end: 1.8, text: 'തുരുമ്പിച്ച മുഖം തന്നെ!' }, { start: 1.8, end: 4, text: 'ഒരൊറ്റ എക്സ്പ്രഷനും ശരിയായില്ല!' }] }
+];
+
+window.dialogueCues = dialogueCues;
